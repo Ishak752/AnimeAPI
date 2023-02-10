@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="anime_adapter_title">Title : %1$s</string>
+    <string name="anime_adapter_rating">Rating : %1$s</string>
+    <string name="anime_adapter_start_date">Start Date : %1$s</string>
+    <string name="anime_adapter_end_date">End Date : %1$s</string>
+    <string name="anime_adapter_status">Status : %1$s</string>
+    <string name="tv_title">Title : Anime</string>
+    <string name="tv_rating">Rating : 4.86</string>
+    <string name="star_rating">Star Rating</string>
+    <string name="tv_start_date">Start Date : 2022–07-19</string>
+    <string name="tv_end_date">End Date : 2022–07-19</string>
+    <string name="tv_status">Status : Completed</string>
+    <string name="iv_poster">Anime Poster</string>
+    <string name="iv_cover">Image Cover</string>
+</resources>
