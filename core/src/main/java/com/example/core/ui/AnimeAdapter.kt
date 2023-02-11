@@ -1,39 +1,32 @@
 package com.example.core.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.core.R
+import com.example.core.data.source.local.entity.AnimeEntity
 import com.example.core.databinding.ItemAnimeBinding
 import com.example.core.domain.model.Anime
 
-class AnimeAdapter : RecyclerView.Adapter<AnimeAdapter.ListViewHolder>() {
+class AnimeAdapter(private val onItemClick: (Anime)->Unit) : ListAdapter<Anime,AnimeAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
-    private var listData = ArrayList<Anime>()
-    var onItemClick: ((Anime) -> Unit)? = null
-
-    fun setData(newListData: List<Anime>?) {
-        if (newListData == null) return
-        listData.clear()
-        listData.addAll(newListData)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+        val binding = ItemAnimeBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return ListViewHolder(binding,onItemClick)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ListViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_anime, parent, false)
-        )
-
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val data = listData[position]
+        val data = getItem(position)
         holder.bind(data)
     }
 
-    override fun getItemCount(): Int = listData.size
-
-    inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val binding = ItemAnimeBinding.bind(itemView)
+    class ListViewHolder(private val binding: ItemAnimeBinding,val onItemClick: (Anime) -> Unit)
+        : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Anime) {
             with(binding) {
                 Glide.with(itemView.context)
@@ -49,12 +42,23 @@ class AnimeAdapter : RecyclerView.Adapter<AnimeAdapter.ListViewHolder>() {
                 tvEndDate.text =
                     itemView.context.getString(R.string.anime_adapter_end_date, data.endDate)
             }
-        }
-
-        init {
-            binding.root.setOnClickListener {
-                onItemClick?.invoke(listData[adapterPosition])
+            itemView.setOnClickListener{
+                onItemClick(data)
             }
         }
+    }
+
+    companion object {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<Anime> =
+            object : DiffUtil.ItemCallback<Anime>() {
+                override fun areItemsTheSame(oldUser: Anime, newUser: Anime): Boolean {
+                    return oldUser.title == newUser.title
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                override fun areContentsTheSame(oldUser: Anime, newUser: Anime): Boolean {
+                    return oldUser == newUser
+                }
+            }
     }
 }

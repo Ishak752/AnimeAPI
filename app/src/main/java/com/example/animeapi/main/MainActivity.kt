@@ -31,12 +31,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val animeAdapter = AnimeAdapter()
-        animeAdapter.onItemClick = { selectedData ->
+        val animeAdapter = AnimeAdapter{ anime ->
             val intent = Intent(this@MainActivity, DetailAnimeActivity::class.java)
-            intent.putExtra(DetailAnimeActivity.EXTRA_DATA, selectedData)
+            intent.putExtra(DetailAnimeActivity.EXTRA_DATA, anime)
             startActivity(intent)
         }
+//        animeAdapter.onItemClick = { selectedData ->
+//            val intent = Intent(this@MainActivity, DetailAnimeActivity::class.java)
+//            intent.putExtra(DetailAnimeActivity.EXTRA_DATA, selectedData)
+//            startActivity(intent)
+//        }
 
         mainViewModel.anime.observe(this@MainActivity) { anime ->
             if (anime != null) {
@@ -44,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                     is Resource.Loading -> binding.pbMain.visibility = View.VISIBLE
                     is Resource.Success -> {
                         binding.pbMain.visibility = View.GONE
-                        animeAdapter.setData(anime.data)
+                        animeAdapter.submitList(anime.data)
                     }
                     is Resource.Error -> {
                         binding.pbMain.visibility = View.GONE

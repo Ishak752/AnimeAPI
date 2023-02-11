@@ -36,15 +36,14 @@ class FavoriteActivity : AppCompatActivity() {
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val animeAdapter = AnimeAdapter()
-        animeAdapter.onItemClick = { selectedData ->
+        val animeAdapter = AnimeAdapter{ anime ->
             val intent = Intent(this@FavoriteActivity, DetailAnimeActivity::class.java)
-            intent.putExtra(DetailAnimeActivity.EXTRA_DATA, selectedData)
+            intent.putExtra(DetailAnimeActivity.EXTRA_DATA, anime)
             startActivity(intent)
         }
 
         favoriteViewModel.favoriteAnime.observe(this@FavoriteActivity) { dataAnime ->
-            animeAdapter.setData(dataAnime)
+            animeAdapter.submitList(dataAnime)
             binding.viewEmpty.root.visibility =
                 if (dataAnime.isNotEmpty()) View.GONE else View.VISIBLE
         }
