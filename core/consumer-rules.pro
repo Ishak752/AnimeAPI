@@ -63,6 +63,10 @@
 -keep,allowobfuscation interface <1>
  
 -dontwarn kotlinx.**
+
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
  
  
 ##---------------Begin: proguard configuration for Glide ----------
